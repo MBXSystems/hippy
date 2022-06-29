@@ -1,5 +1,5 @@
 defmodule Hippy.Request do
-  defstruct version: Hippy.IPPVersion.new(1, 1),
+  defstruct version: Hippy.IPPVersion.new(1, 0),
             operation_id: nil,
             request_id: nil,
             operation_attributes: [],
