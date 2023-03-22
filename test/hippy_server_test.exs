@@ -1,5 +1,5 @@
 defmodule Hippy.ServerTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Hippy.{Server, Operation.GetJobs}
 

@@ -1,0 +1,5 @@
+{
+  "rust-analyzer.linkedProjects": [
+    "native/hippy_cups/Cargo.toml"
+  ]
+}

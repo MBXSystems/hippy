@@ -15,14 +15,17 @@ defmodule Hippy.Server do
     {:error, :printer_uri_required}
   end
 
-  def send_operation(op, endpoint) do
+  def send_operation(op, endpoint, headers \\ []) do
     Hippy.Operation.build_request(op)
-    |> send_request(endpoint)
+    |> send_request(endpoint, headers)
   end
 
-  def send_request(%Hippy.Request{} = req, endpoint) do
+  @spec send_request(Hippy.Request.t(), String.t(), Keyword.t()) ::
+          {:ok, Hippy.Response.t()} | {:error, any()}
+  def send_request(%Hippy.Request{} = req, endpoint, headers \\ []) do
     # TODO: Rework error handling.  It's broken.
-    with {:ok, %{body: body, status_code: 200}} <- post(endpoint, Hippy.Encoder.encode(req)) do
+    with {:ok, %{body: body, status_code: 200}} <-
+           post(endpoint, Hippy.Encoder.encode(req), headers) do
       {:ok, Hippy.Decoder.decode(body)}
     end
   end
@@ -58,8 +61,8 @@ defmodule Hippy.Server do
     {:error, {:unsupported_uri_scheme, scheme}}
   end
 
-  defp post(url, body) do
-    headers = ["Content-Type": "application/ipp"]
+  defp post(url, body, headers) do
+    headers = Keyword.merge(headers, "Content-Type": "application/ipp")
     HTTPoison.post(url, body, headers)
   end
 end

@@ -1,0 +1,14 @@
+[package]
+name = "hippy_cups"
+version = "0.1.0"
+authors = []
+edition = "2021"
+
+[lib]
+name = "hippy_cups"
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+rustler = "0.27.0"
+ipp = "4.0.0"
