@@ -14,7 +14,7 @@ defmodule Hippy.Encoder do
         encode_attribute(attribute)
       end
 
-    <<bin::binary, DelimiterTag.end_of_attributes()::8-signed, req.data :: binary>>
+    <<bin::binary, DelimiterTag.end_of_attributes()::8-signed, req.data::binary>>
   end
 
   defp encode_attribute({tag, name, value})
@@ -24,7 +24,8 @@ defmodule Hippy.Encoder do
   end
 
   defp encode_attribute({{:set1, tag}, name, value})
-       when tag in [:charset, :uri, :natural_language, :keyword, :name_without_language] and is_list(value) do
+       when tag in [:charset, :uri, :natural_language, :keyword, :name_without_language] and
+              is_list(value) do
     [head_value | tail] = value
 
     bin =
@@ -65,5 +66,4 @@ defmodule Hippy.Encoder do
   end
 
   defp value_tag(tag) when is_atom(tag), do: ValueTag.encode!(tag)
-  defp value_tag(tag), do: tag
 end

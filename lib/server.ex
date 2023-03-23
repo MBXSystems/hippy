@@ -63,6 +63,6 @@ defmodule Hippy.Server do
 
   defp post(url, body, headers) do
     headers = Keyword.merge(headers, "Content-Type": "application/ipp")
-    HTTPoison.post(url, body, headers)
+    HTTPoison.post(url, body, headers, hackney: [:insecure])
   end
 end
