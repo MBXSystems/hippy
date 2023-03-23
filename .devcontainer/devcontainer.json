@@ -6,9 +6,7 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "JakeBecker.elixir-ls",
-        "rust-lang.rust-analyzer",
-        "bungcip.better-toml"
+        "JakeBecker.elixir-ls"
       ]
     }
   }
