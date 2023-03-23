@@ -1,5 +1,5 @@
 defmodule Hippy.AttributeGroupTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   alias Hippy.PrintResolution
 
