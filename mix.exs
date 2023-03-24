@@ -24,7 +24,6 @@ defmodule Hippy.MixProject do
   defp deps do
     [
       {:httpoison, "~> 2.1"},
-      {:rustler, "~> 0.27"},
       {:ex_doc, "~> 0.29", only: :dev}
     ]
   end
