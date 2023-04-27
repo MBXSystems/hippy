@@ -14,7 +14,7 @@ defmodule Hippy.Operation.PrintJob do
             document: nil,
             charset: @def_charset,
             language: @def_lang,
-            job_name: @def_job_name
+            job_name: @def_job_name,
             copies: @def_copies
 
   def new(printer_uri, document, opts \\ []) do
