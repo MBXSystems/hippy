@@ -11,7 +11,7 @@ defmodule Hippy.Encoder do
     req
     |> request_header()
     |> encode_operation_attributes(req)
-    |> encode_job_attributes(req)
+    # |> encode_job_attributes(req)
     |> then(& <<&1::binary, req.data::binary>>)
   end
 
