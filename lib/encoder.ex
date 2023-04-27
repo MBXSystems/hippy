@@ -42,7 +42,7 @@ defmodule Hippy.Encoder do
       DelimiterTag.end_of_attributes()::8-signed>>
   end
 
-  def encode_job_attributes(encoded, _request), do: encoded
+  defp encode_job_attributes(encoded, _request), do: encoded
 
   defp encode_attribute({tag, name, value})
        when tag in [:charset, :uri, :natural_language, :keyword, :name_without_language] do
