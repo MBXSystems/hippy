@@ -8,14 +8,41 @@ defmodule Hippy.Encoder do
 
   @doc "Encodes an IPP request into its binary form."
   def encode(%Request{} = req) do
+    req
+    |> request_header()
+    |> encode_operation_attributes(req)
+    |> encode_job_attributes(req)
+    |> then(& <<&1::binary, req.data::binary>>)
+  end
+
+  defp encode_operation_attributes(encoded, %Request{operation_attributes: operation_attributes}) do
     bin =
-      for attribute <- req.operation_attributes, into: request_header(req) do
+      for attribute <- operation_attributes, into: <<>> do
         # TODO: Deal with invalid tag error in the middle of loop.
         encode_attribute(attribute)
       end
 
-    <<bin::binary, DelimiterTag.end_of_attributes()::8-signed, req.data::binary>>
+    <<encoded::binary,
+      DelimiterTag.operation_attributes()::8-signed,
+      bin::binary,
+      DelimiterTag.end_of_attributes()::8-signed>>
   end
+
+  defp encode_job_attributes(encoded, %Request{job_attributes: job_attributes})
+      when is_list(job_attributes) and length(job_attributes) > 0 do
+    bin =
+      for attribute <- job_attributes, into: <<>> do
+        # TODO: Deal with invalid tag error in the middle of loop.
+        encode_attribute(attribute)
+      end
+
+    <<encoded::binary,
+      DelimiterTag.job_attributes()::8-signed,
+      bin::binary,
+      DelimiterTag.end_of_attributes()::8-signed>>
+  end
+
+  def encode_job_attributes(encoded, _request), do: encoded
 
   defp encode_attribute({tag, name, value})
        when tag in [:charset, :uri, :natural_language, :keyword, :name_without_language] do
@@ -62,7 +89,7 @@ defmodule Hippy.Encoder do
 
   defp request_header(req) do
     <<req.version.major::8-signed, req.version.minor::8-signed, req.operation_id::16-signed,
-      req.request_id::32-signed, DelimiterTag.operation_attributes()::8-signed>>
+      req.request_id::32-signed>>
   end
 
   defp value_tag(tag) when is_atom(tag), do: ValueTag.encode!(tag)
