@@ -42,6 +42,7 @@ defimpl Hippy.Operation, for: Hippy.Operation.PrintJob do
         {:natural_language, "attributes-natural-language", op.language},
         {:uri, "printer-uri", target},
         {:name_without_language, "job-name", op.job_name},
+        {:boolean, "ipp-attribute-fidelity", true}
       ],
       job_attributes: [
         {:integer, "copies", op.copies}
