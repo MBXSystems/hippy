@@ -11,8 +11,8 @@ defmodule Hippy.Encoder do
     req
     |> request_header()
     |> encode_operation_attributes(req)
-    # |> encode_job_attributes(req)
-    |> then(& <<&1::binary, req.data::binary>>)
+    |> encode_job_attributes(req)
+    |> then(& <<&1::binary, DelimiterTag.end_of_attributes()::8-signed, req.data::binary>>)
   end
 
   defp encode_operation_attributes(encoded, %Request{operation_attributes: operation_attributes}) do
@@ -22,10 +22,7 @@ defmodule Hippy.Encoder do
         encode_attribute(attribute)
       end
 
-    <<encoded::binary,
-      DelimiterTag.operation_attributes()::8-signed,
-      bin::binary,
-      DelimiterTag.end_of_attributes()::8-signed>>
+    <<encoded::binary, DelimiterTag.operation_attributes()::8-signed, bin::binary>>
   end
 
   defp encode_job_attributes(encoded, %Request{job_attributes: job_attributes})
@@ -36,10 +33,7 @@ defmodule Hippy.Encoder do
         encode_attribute(attribute)
       end
 
-    <<encoded::binary,
-      DelimiterTag.job_attributes()::8-signed,
-      bin::binary,
-      DelimiterTag.end_of_attributes()::8-signed>>
+    <<encoded::binary, DelimiterTag.job_attributes()::8-signed, bin::binary>>
   end
 
   defp encode_job_attributes(encoded, _request), do: encoded
