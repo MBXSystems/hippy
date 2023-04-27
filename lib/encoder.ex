@@ -64,6 +64,12 @@ defmodule Hippy.Encoder do
       value::size(4)-unit(8)-signed>>
   end
 
+  defp encode_attribute({:boolean, name, value}) when tag in [:boolean] do
+    value = value && 1 || 0
+    <<value_tag(tag)::8-signed, byte_size(name)::16-signed, name::binary, 1::16-signed,
+      value::size(2)-unit(8)-signed>>
+  end
+
   defp encode_attribute({{:set1, tag}, name, value})
        when tag in [:integer, :enum] and is_list(value) do
     [head_value | tail] = value
